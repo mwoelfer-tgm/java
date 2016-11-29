@@ -1,0 +1,12 @@
+package jdbcdemo;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class JDBCDemo {
+	public static void main(String[] args){
+		Connection c = null;
+		
+		c = DriverManager.getConnection('jdbc:postgreqsql://127.0.0.1:5432/webshop');
+	}
+}

@@ -1,0 +1,10 @@
+\BOOKMARK [1][-]{section.1}{Aufgabenstellung}{}% 1
+\BOOKMARK [1][-]{section.2}{Source-Code}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{JDBCClient.java}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{ArtikelAdmin.java}{section.2}% 4
+\BOOKMARK [1][-]{section.3}{Screenshots}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{GUI}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.2}{Artikel hinzuf\374gen}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.3}{Artikel \344ndern}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.4}{Artikel l\366schen}{section.3}% 9
+\BOOKMARK [1][-]{section.4}{SQL Injection}{}% 10

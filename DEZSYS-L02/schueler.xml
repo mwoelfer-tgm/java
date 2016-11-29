@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<SchuelerInformationen>
+	<Schule name="TGM">
+		<Abteilung name="HIT">
+			<Schueler name="mwoelfer">
+				<Noten>
+					<Deutsch> 2 </Deutsch>
+					<Mathe> 2 </Mathe>
+					<SEW> 1 </SEW>
+				</Noten>
+			</Schueler>
+		</Abteilung>
+	</Schule>
+	<Schueler>
+	</Schueler>
+</SchuelerInformationen>
