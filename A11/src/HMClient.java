@@ -7,6 +7,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class HMClient {
+	/**
+	 * Main method of the HangManClient
+	 * Connects to the server and sends the server data. The server responds accordingly and the client also responds if the Server closed the game by either winning or losing
+	 * @param args command line parameter which contain the hostname and portnumber
+	 */
 	public static void main(String[] args)  {
 		//Initialize Variables for creating socket
 		String hostName = "";

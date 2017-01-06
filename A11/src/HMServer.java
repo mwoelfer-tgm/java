@@ -28,6 +28,7 @@ public class HMServer {
 		String[] words = getWords();
 		//Create a collection for all the correctly guessed letters
 		ArrayList<String> correctLetters = new ArrayList<>();
+		ArrayList<String> wrongLetters = new ArrayList<>();
 		//Initialize variable for the tries, initially with 9
 		int tries = 9;
 		//Initialize variable for the portnumber
@@ -59,17 +60,20 @@ public class HMServer {
 				//Set the user input to uppercase to ease comparison
 				input = input.toUpperCase();
 				if(input.length() == 1){
-					if(letterInList(input.charAt(0), correctLetters)){
-						out.println("This letter was already correctly guessed! Please choose another one. Current word: " + getCurrWord(word, correctLetters));
-					} else{
+					//If the guessed letter was already guessed respond accordingly
+					if(letterInList(input.charAt(0), correctLetters) || letterInList(input.charAt(0), wrongLetters)){
+						out.println("This letter was already guessed! Please choose another one. Current word: " + getCurrWord(word, correctLetters) + " Already wrong guessed letters: " + wrongLetters.toString());
+					}
+					else{
 						if(word.contains(input)){
 							//If the input was only 1 letter and this letter is contained by the desired word add it to the correctLetters-list and send response
 							correctLetters.add(input);
-							out.println("Guess correct! Current word: " + getCurrWord(word, correctLetters));
+							out.println("Guess correct! Current word: " + getCurrWord(word, correctLetters) + " Already wrong guessed letters: " + wrongLetters.toString());
 						} else{
-							//If user input was not contained by the word, decrement the tries-variable and send response
+							//If user input was not contained by the word, add it to the wrongLetters-list, decrement the tries-variable and send response
 							//Unless there are no tries left, in this case close all resources, send response and exit game
 							tries --;
+							wrongLetters.add(input);
 							if(tries == 0){
 								out.println("You lost! You used all your tries and lost. The correct word was: " + word);
 								serverSocket.close();
@@ -78,7 +82,7 @@ public class HMServer {
 								in.close();
 								break;
 							}
-							out.println("Guess wrong! You have " + tries + " remaining tries! Current word: " + getCurrWord(word, correctLetters));
+							out.println("Guess wrong! You have " + tries + " remaining tries! Current word: " + getCurrWord(word, correctLetters) + " Already wrong guessed letters: " + wrongLetters.toString());
 						}
 					}
 				} else{
