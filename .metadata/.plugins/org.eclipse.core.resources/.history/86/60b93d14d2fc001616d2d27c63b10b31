@@ -1,0 +1,9 @@
+package bruch
+
+class Bruch {
+	Integer zaehler
+	Integer nenner
+	String toString(){
+		"Bruch($zaehler, $nenner)"
+	}
+}

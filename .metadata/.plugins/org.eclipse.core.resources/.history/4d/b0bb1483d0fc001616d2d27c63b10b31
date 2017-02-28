@@ -1,0 +1,11 @@
+package bruch
+
+class Bruch {
+	Integer zaehler
+	Integer nenner
+	
+	print("test")
+	String toString(){
+		"Bruch($zaehler, $nenner)"
+	}
+}

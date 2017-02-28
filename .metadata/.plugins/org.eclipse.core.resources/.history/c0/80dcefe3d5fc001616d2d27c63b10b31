@@ -1,0 +1,10 @@
+package bruch
+
+class Bruch {
+	Integer z
+	Integer n
+	
+	String toString(){
+		"Bruch($z, $n)"
+	}
+}

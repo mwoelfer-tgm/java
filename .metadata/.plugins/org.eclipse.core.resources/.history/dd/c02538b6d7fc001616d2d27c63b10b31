@@ -1,0 +1,32 @@
+package bruch
+
+class Bruch {
+	BigInteger z
+	BigInteger n
+	
+	Bruch(Bruch b){
+		this.z = b.z
+		this.n = b.n
+	}
+	
+	Bruch(int z){
+		this.z = z 
+		this.n = 1
+	}
+	
+	Bruch(int z, int n){
+		this.z = z
+		this.n = n
+	}
+	
+	String toString(){
+		"Bruch($z, $n)"
+	}
+	
+	Double doubleValue(){
+		this.z / this.n
+	}
+	Bruch div(Bruch other){
+		new Bruch(this.z * other.n, this.n * other.z)
+	}
+}

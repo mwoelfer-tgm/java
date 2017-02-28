@@ -1,0 +1,27 @@
+package bruch
+
+class Bruch {
+	Integer z
+	Integer n
+	
+	Bruch(Bruch b){
+		this.z = b.z
+		this.n = b.n
+	}
+	
+	Bruch(int z){
+		this.z = z 
+		this.n = 1
+	}
+	
+	Bruch(int z, int n){
+		this.z = z
+		this.n = n
+	}
+	
+	
+	
+	String toString(){
+		"Bruch($z, $n)"
+	}
+}

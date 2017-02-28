@@ -1,0 +1,39 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class HMClient {
+	public static void main(String[] args)  {
+		String hostName = "";
+		int portNumber = 0;
+		try{
+			hostName = args[0];
+			portNumber = Integer.parseInt(args[1]);
+		} catch (Exception e){
+			System.err.println("Bitte gültigen Hostnamen und Portnummer angeben!");
+		}
+		try(Socket socket = new Socket(hostName,portNumber);
+			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in))){
+			String userInput;
+			System.out.println("Client connected on " + hostName + ":" + portNumber);
+			while ((userInput = stdIn.readLine()) != null){
+				out.println(userInput);
+				String answer = in.readLine();
+				System.out.println("Answer: " + in.readLine());
+				if(in.readLine().contains("You won!")) break;
+			}
+		} catch(UnknownHostException e){
+			System.err.println("Don't know about host " + hostName + ":" + portNumber);
+			System.exit(1);
+		} catch(IOException e){
+			System.err.println("Couldn't get IO for connection to " + hostName + ":" + portNumber);
+			System.exit(1);
+		}
+	}
+}

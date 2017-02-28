@@ -1,0 +1,162 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+
+/**
+ * 
+ * @author 	Martin Wölfer
+ * @version 1.0
+ * @since	2017-01-06
+ */
+public class HMServer {
+	/**
+	 * The main method of the HangManServer
+	 * Accepts a client, chooses a random word from a list and checks each time the client responses if this letter is contained by the word
+	 * 
+	 * @param args command line parameter for initializing the socket
+	 * @throws FileNotFoundException The main function has to throw this exception because a file gets read
+	 * @throws IOException The main funciton has to throw this exception because a file gets read
+	 */
+	public static void main(String[] args) throws FileNotFoundException, IOException{
+		//Fill String Array with all the words from the textfile
+		String[] words = getWords();
+		//Create a collection for all the correctly guessed letters
+		ArrayList<String> correctLetters = new ArrayList<>();
+		ArrayList<String> wrongLetters = new ArrayList<>();
+		//Initialize variable for the tries, initially with 9
+		int tries = 9;
+		//Initialize variable for the portnumber
+		int portNumber = 0;
+		try{
+			//Get portnumber from the command line parameter
+			portNumber = Integer.parseInt(args[0]);			
+		} catch(Exception e){
+			System.err.println("Bitte gültige Portnummer angeben!");
+		}
+		//Open necessary recources with try => can be compared with the "with-statement"
+		
+		//ServerSocket serverSocket: the serversocket which gets connections from clients
+		//Socket clientSocket: the client which gets accepted by the server
+		//PrintWriter out: The PrintWriter which sends responses to the client
+		//BufferedReader in : The BufferedReader which receives responses from the client
+		try(
+		ServerSocket serverSocket = new ServerSocket(portNumber);
+		Socket clientSocket = serverSocket.accept();
+		PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+		BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));){
+			//Put out message that a client was successfully connected
+			System.out.println("Client connected on port " + portNumber + " with " + clientSocket.toString());
+			//Once a client connects choose a random word from the words-list
+			String word = words[(int)(Math.random() * ((words.length)))];
+			String input;
+			//Wait for a user input
+			while((input = in.readLine()) != null){
+				//Set the user input to uppercase to ease comparison
+				input = input.toUpperCase();
+				if(input.length() == 1){
+					//If the guessed letter was already guessed respond accordingly
+					if(letterInList(input.charAt(0), correctLetters)){
+						out.println("This letter was already correctly guessed! Please choose another one. Current word: " + getCurrWord(word, correctLetters));
+					} else if(letterInList(input.charAt(0), wrongLetters)){
+						out.println("This letter was already wrong guessed! Please choose another one. Current word: " + getCurrWord(word, correctLetters));
+					}
+					else{
+						if(word.contains(input)){
+							//If the input was only 1 letter and this letter is contained by the desired word add it to the correctLetters-list and send response
+							correctLetters.add(input);
+							out.println("Guess correct! Current word: " + getCurrWord(word, correctLetters));
+						} else{
+							//If user input was not contained by the word, decrement the tries-variable and send response
+							//Unless there are no tries left, in this case close all resources, send response and exit game
+							tries --;
+							if(tries == 0){
+								out.println("You lost! You used all your tries and lost. The correct word was: " + word);
+								serverSocket.close();
+								clientSocket.close();
+								out.close();
+								in.close();
+								break;
+							}
+							out.println("Guess wrong! You have " + tries + " remaining tries! Current word: " + getCurrWord(word, correctLetters));
+						}
+					}
+				} else{
+					//If input wasn't only one letter (=> word was guessed) check if the guessed word equals the desired word
+					//Also no matter what the game gets terminated
+					if(input.equals(word.trim())) out.println("You won!"); else out.println("You lost! The correct word was " + word);
+					serverSocket.close();
+					clientSocket.close();
+					out.close();
+					in.close();
+					break;
+				}
+			}
+		} catch(IOException e){
+			System.out.println("Exception caught when trying to listen on port " + portNumber + " or listening for a connection");
+		}
+	}
+	/**
+	 * Gets the word and the correctLetters as parameter and prints all the letters of the word which are contained by the correctLetters list
+	 * For example, word=SCHORNSTEIN, correctLetters=["S,A,C"], the output would be: SC____S____
+	 * @param word The desired word
+	 * @param correctLetters ArrayList containing all the correctly guessed letters
+	 * @return A String which only shows letters of the word which are correctly guessed
+	 */
+	public static String getCurrWord(String word, ArrayList<String> correctLetters){
+		String result = "";
+		//Iterate through the word
+		for(int i = 0; i < word.length()-1; i++){
+			if(letterInList(word.charAt(i),correctLetters) || word.charAt(i) == ' '){
+				//If the letter of the word is contained by the list or its a whitespace, add it to the result
+				result += word.charAt(i);
+			} else{
+				//If the letter of the word isn't contained, add an underline to the result
+				result += "_";
+			}
+		}
+		return result;
+	}
+	/**
+	 * Checks if a char is contained by an ArrayList with strings
+	 * @param letter the letter which gets checked if it is in the list
+	 * @param list the list which contains the letters
+	 * @return true if it is contained and false if not
+	 */
+	
+	public static boolean letterInList(char letter, ArrayList<String> list){
+		for(String x: list){
+			if(x.charAt(0) == letter) return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Reads the words from the file which are seperated by returns
+	 * @return A String array with the words from the file
+	 * @throws FileNotFoundException In case the file doesn't exist
+	 * @throws IOException In case some kind of error occured while reading or writing
+	 */
+	public static String[] getWords() throws FileNotFoundException, IOException{
+		//Open a BufferedReader resource with the try-statement
+		try(BufferedReader br = new BufferedReader(new FileReader("words.txt"))) {
+		    StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+		    
+		    //Add the whole file to a Stringbuilder
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    //Add the end convert everything to upperCase and split at every return
+		    return sb.toString().toUpperCase().split("\n");
+		}
+	}
+
+}

@@ -1,0 +1,20 @@
+package bruch
+
+class Bruch {
+	Integer z
+	Integer n
+	
+	Bruch(int zaehler){
+		this.z = zaehler
+		this.n = 1
+	}
+	
+	Bruch(int zaehler, int nenner){
+		this.z = zaehler
+		this.n = nenner
+	}
+	
+	String toString(){
+		"Bruch($z, $n)"
+	}
+}

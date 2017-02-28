@@ -1,0 +1,114 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+
+/**
+ * 
+ * @author 	Martin Wölfer
+ * @version 1.0
+ * @since	2017-01-06
+ */
+public class HMServer {
+	/**
+	 * 
+	 * @param args command line parameter for initializing the socket
+	 * @throws FileNotFoundException The main function has to throw this exception because a file gets read
+	 * @throws IOException The main funciton has to throw this exception because a file gets read
+	 */
+	public static void main(String[] args) throws FileNotFoundException, IOException{
+		//Fill String Array with all the words from the textfile
+		String[] words = getWords();
+		//Create a collection for all the correctly guessed letters
+		ArrayList<String> correctLetters = new ArrayList<>();
+		//Initialize variable for the tries, initially with 9
+		int tries = 9;
+		//Initialize variable for the portnumber
+		int portNumber = 0;
+		try{
+			//Get portnumber from the command line parameter
+			portNumber = Integer.parseInt(args[0]);			
+		} catch(Exception e){
+			System.err.println("Bitte gültige Portnummer angeben!");
+		}
+		try(
+		ServerSocket serverSocket = new ServerSocket(portNumber);
+		Socket clientSocket = serverSocket.accept();
+		PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+		BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));){
+			System.out.println("Client connected on port " + portNumber);
+			String word = words[(int)(Math.random() * ((words.length)))];
+			System.out.println("Zu erratendes wort: " + word);
+			String input;
+			while((input = in.readLine()) != null){
+				input = input.toUpperCase();
+				if(input.length() == 1){
+					if(word.contains(input)){
+						correctLetters.add(input);
+						out.println("Guess correct! Current word: " + printWord(word, correctLetters));
+					} else{
+						tries --;
+						if(tries == 0){
+							out.println("Guess wrong! You used all your tries and lost.");
+							serverSocket.close();
+							clientSocket.close();
+							out.close();
+							in.close();
+							break;
+						}
+						out.println("Guess wrong! You have " + tries + " remaining tries! Current word: " + printWord(word, correctLetters));
+					}
+				} else{
+					System.out.println(input+"="+word);
+					if(input.equals(word.trim())){
+						out.println("You won! The correct word was " + word);
+						serverSocket.close();
+						clientSocket.close();
+						out.close();
+						in.close();
+						break;
+					}
+				}
+			}
+		} catch(IOException e){
+			System.out.println("Exception caught when trying to listen on port " + portNumber + " or listening for a connection");
+		}
+	}
+	public static String printWord(String word, ArrayList<String> correctLetters){
+		String result = "";
+		for(int i = 0; i < word.length()-1; i++){
+			if(letterInList(word.charAt(i),correctLetters) || word.charAt(i) == ' '){
+				result += word.charAt(i);
+			} else{
+				result += "_";
+			}
+		}
+		return result;
+	}
+	public static boolean letterInList(char letter, ArrayList<String> list){
+		for(String x: list){
+			if(x.charAt(0) == letter) return true;
+		}
+		return false;
+	}
+	public static String[] getWords() throws FileNotFoundException, IOException{
+		try(BufferedReader br = new BufferedReader(new FileReader("words.txt"))) {
+		    StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    String everything = sb.toString().toUpperCase();
+		    return everything.split("\n");
+		}
+	}
+
+}

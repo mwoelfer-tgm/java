@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="BruchTest" project="A12" tests="43" started="43" failures="0" errors="0" ignored="0">
+  <testsuite name="test.BruchTest" time="0.188">
+    <testcase name="testDivideBruch" classname="test.BruchTest" time="0.105"/>
+    <testcase name="testDivideBruch2" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testGcd" classname="test.BruchTest" time="0.0"/>
+    <testcase name="testcompareToGreather" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testGetN" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testGetZ" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testSetN" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testSetZ" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testToString" classname="test.BruchTest" time="0.012"/>
+    <testcase name="testasDouble" classname="test.BruchTest" time="0.017"/>
+    <testcase name="testNegative2" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testPlusBruch" classname="test.BruchTest" time="0.008"/>
+    <testcase name="testcompareToLower" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testBruchBigInteger" classname="test.BruchTest" time="0.0"/>
+    <testcase name="testDivideBigInteger" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testMinusBruch2" classname="test.BruchTest" time="0.004"/>
+    <testcase name="testasString" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testMultiplyBruch2" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testPlusBruch2" classname="test.BruchTest" time="0.002"/>
+    <testcase name="testPlusBigInteger" classname="test.BruchTest" time="0.0"/>
+    <testcase name="testcompareToEquals" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testBruchBruch" classname="test.BruchTest" time="0.0"/>
+    <testcase name="testdoubleValue" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testMultiplyBigInteger" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testMinusBigIntegerBigInteger" classname="test.BruchTest" time="0.002"/>
+    <testcase name="testCorrect" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testDivideBigInteger2" classname="test.BruchTest" time="0.008"/>
+    <testcase name="testDivideBigInteger3" classname="test.BruchTest" time="0.002"/>
+    <testcase name="testMinusBigInteger" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testDivideBigIntegerBigInteger" classname="test.BruchTest" time="0.002"/>
+    <testcase name="testMinusBruch" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testPlusBigIntegerBigInteger" classname="test.BruchTest" time="0.002"/>
+    <testcase name="testBruchBigIntegerBigInteger" classname="test.BruchTest" time="0.0"/>
+    <testcase name="testasBigDecimal" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testasInteger" classname="test.BruchTest" time="0.0"/>
+    <testcase name="testNegative" classname="test.BruchTest" time="0.0"/>
+    <testcase name="testShorten" classname="test.BruchTest" time="0.002"/>
+    <testcase name="testMultiplyBruch" classname="test.BruchTest" time="0.0"/>
+    <testcase name="testasBigInteger" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testMultiplyBigIntegerBigInteger" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testDoubleValue" classname="test.BruchTest" time="0.0"/>
+    <testcase name="testDivideBruchIllegalArgumentException" classname="test.BruchTest" time="0.001"/>
+    <testcase name="testasLong" classname="test.BruchTest" time="0.001"/>
+  </testsuite>
+</testrun>

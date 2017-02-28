@@ -1,0 +1,209 @@
+package bruch
+
+/**
+ * 
+ * @author Martin Woelfer
+ * @version 2017-02-28
+ */
+class Bruch implements Comparable{
+	BigInteger z
+	BigInteger n
+	
+	/**
+	 * Standard Constructor if 2 BigIntegers (long included) are given
+	 * @param z the counter of the fraction to be created
+	 * @param n the denominator of the fraction to be created
+	 */
+	Bruch(BigInteger z, BigInteger n){
+		// check if the denominator is invalid
+		if (n == 0){
+			throw new IllegalArgumentException("Nenner als 0 nicht erlaubt!")
+		}
+		this.z = z
+		this.n = n
+	}
+	
+	/**
+	 * Constructor if a fraction is given as argument instead of 2 numbers
+	 * @param b object of the fraction
+	 */
+	Bruch(Bruch b){
+		// instead of assigning counter and denominator use standard constructor
+		this(b.z, b.n)
+	}
+	
+	/**
+	 * Constructor if only the counter is given => implied that denominator is 1
+	 * @param z counter of the fraction to be created
+	 */
+	Bruch(BigInteger z){
+		// again use the standard constructor instead of assigning values by hand
+		this(z, 1)
+	}
+	
+	/**
+	 * 
+	 * @param other the class that the fraction is being casted to
+	 * @return the fraction casted to the class given as argument
+	 */
+	def asType(Class other){
+		// if other is a string, don't convert to doubleValue rather create the string
+		// if it's anything other, convert to doubleValue and cast to class given as argument
+		other == String ? toString() : doubleValue().asType(other)
+	}
+	
+	/**
+	 * 
+	 * @return the fraction converted to a string using interpolation
+	 */
+	String toString(){
+		"Bruch($z, $n)"
+	}
+	
+	/**
+	 * 
+	 * @return the fraction as a double value
+	 */
+	Double doubleValue(){
+		this.z / this.n
+	}
+	
+	/**
+	 * Divides 2 fractions by multiplying each counter and denominator
+	 * @param other the fraction or number that this fraction is getting divided by
+	 * @param optional this parameter exists, because it has to be possible to call
+	 * this method with 2 numbers instead of a fraction or a single number,
+	 * in this case, other becomes the counter and optional the denominator
+	 * @return this fraction divided by the other fraction
+	 */
+	Bruch div(other, optional=null){
+		// calculate counter and denominator if argument is a fraction
+		if(other instanceof Bruch){
+			this.z *= other.n
+			this.n *= other.z
+		// calculate denominator if argument is single number, counter stays the same
+		} else if (optional == null){
+			this.n *= other
+		// calculate counter and denominator if argument is 2 numbers
+		} else {
+			this.z *= optional
+			this.n *= other
+		}
+		new Bruch(this.z,this.n)
+	}
+	
+	/**
+	 * Multiplies 2 fractions by multiplying counter and denominator
+	 * @param other the fraction or number that this fraction is getting multiplied by
+	 * @param optional this parameter exists, because it has to be possible to call
+	 * this method with 2 numbers instead of a fraction or a single number,
+	 * in this case, other becomes the counter and optional the denominator
+	 * @return this fraction multiplied by the other fraction
+	 */
+	Bruch multiply(other, optional=null){
+		// calculate counter and denominator if argument is a fraction
+		if(other instanceof Bruch){
+			this.z *= other.z
+			this.n *= other.n
+		// calculate counter if argument is single number, denominator stays the same
+		} else if (optional==null){
+			this.z *= other
+		// calculate counter and denominator if argument is 2 numbers
+		} else {
+			this.z *= other
+			this.n *= optional
+		}
+		
+		new Bruch(this.z,this.n)
+	}
+	
+	/**
+	 * Adds 2 fractions by finding the least common multiple and then multiplying
+	 * counters accordingly
+	 * @param other the fraction or number that this fraction is getting added to
+	 * @param optional this parameter exists, because it has to be possible to call
+	 * this method with 2 numbers instead of a fraction or a single number,
+	 * in this case, other becomes the counter and optional the denominator
+	 * @return this fraction added to the other fraction
+	 */
+	Bruch plus(other, optional=null){
+		// calculate counter and denominator if argument is a fraction
+		def neuN = 0
+		if(other instanceof Bruch){
+			def neuN = lcm(this.n,other.n) as BigInteger
+			
+			this.z *= neuN / this.n as BigInteger
+			other.z *= neuN / other.n as BigInteger
+			
+
+		} else if(optional==null){
+		} else {
+			def neuN = lcm(this.n, optional) as BigInteger
+			
+			this.z *= neuN / this.n as BigInteger
+			other *= neuN / optional as BigInteger
+		}
+		new Bruch(this.z + other.z, neuN)
+	}
+	
+	Bruch minus(other, optional=null){
+		if(other instanceof Bruch){
+			def neuN = lcm(this.n,other.n) as BigInteger
+			
+			this.z *= neuN / this.n as BigInteger
+			other.z *= neuN / other.n as BigInteger
+			
+			return new Bruch(this.z - other.z, neuN)
+		} else if(optional == null) {
+			return new Bruch (this.z - (this.n*other), this.n)
+		} else {
+			def neuN = lcm(this.n, optional) as BigInteger
+			
+			this.z *= neuN / this.n as BigInteger
+			other *= neuN / optional as BigInteger
+			
+			return new Bruch(this.z - other, neuN)
+		}
+	}
+	
+	def correct(){
+		if(this.n < 0){
+			this.z = -this.z
+			this.n = -this.n
+		}
+	}
+	
+	Bruch negative(){
+		new Bruch(-this.z, this.n)
+	}
+	
+	def shorten(){
+		def gcd = gcd(this.z,this.n)
+		this.z /= gcd
+		this.n /= gcd
+	}
+	
+	// Source: http://langref.org/scala+groovy/algorithms/arithmetic/greatest-common-divisor
+	def static gcd(int i, int j) {
+		if (Math.min(i,j)==0) return Math.max(i,j)
+		else return gcd(Math.min(i,j),Math.abs(i-j))
+	}
+	
+	// Source: http://stackoverflow.com/questions/4201860/how-to-find-gcd-lcm-on-a-set-of-numbers
+	def static lcm(int a, int b)
+	{
+		return a * (b / gcd(a, b));
+	}
+
+	@Override
+	public int compareTo(Object other) {
+		this.doubleValue() <=> other.doubleValue()
+	}
+	
+	@Override
+	public boolean equals(Object other){
+		this.doubleValue() == other.doubleValue()
+	}
+}
+
+

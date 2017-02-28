@@ -1,0 +1,10 @@
+package bruch
+
+class Bruch {
+	BigDecimal zaehler
+	BigDecimal nenner
+	
+	String toString(){
+		"Bruch($zaehler, $nenner)"
+	}
+}

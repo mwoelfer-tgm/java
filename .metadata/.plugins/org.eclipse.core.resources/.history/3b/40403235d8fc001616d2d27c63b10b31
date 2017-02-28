@@ -1,0 +1,42 @@
+package bruch
+
+class Bruch {
+	BigInteger z
+	BigInteger n
+	
+	Bruch(Bruch b){
+		gcd = gcd_method(b.z,b.n)
+		this.z = b.z / gcd
+		this.n = b.n / gcd
+	}
+	
+	Bruch(int z){
+		gcd = gcd_method(z,1)
+		this.z = z / gcd
+		this.n = 1 / gcd
+	}
+	
+	Bruch(int z, int n){
+		gcd = gcd_method(z,n)
+		this.z = z / gcd
+		this.n = n / gcd
+	}
+	
+	String toString(){
+		"Bruch($z, $n)"
+	}
+	
+	Double doubleValue(){
+		this.z / this.n
+	}
+	Bruch div(Bruch other){
+		new Bruch(this.z * other.n, this.n * other.z)
+	}
+	
+	def gcd_method(int i, int j) {
+		if (Math.min(i,j)==0) return Math.max(i,j)
+		else return gcd(Math.min(i,j),Math.abs(i-j))
+	}
+}
+
+
