@@ -374,7 +374,7 @@ class BruchTest{
 	public void testDivideBigInteger3() {
 		Bruch actual=a/0
 		fail("not reachable")
-	}
+	} 
 	
 	/**
 	 * Test method for {@link bruch.Bruch#plus(java.math.BigInteger)}.
